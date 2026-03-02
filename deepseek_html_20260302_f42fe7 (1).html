@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E.E. Lydia Kitz Moreira – Ciências 6º ano</title>
+    <!-- Font Awesome for icons / imagens simbólicas -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: #f0f4fa;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0,10,30,0.15);
+            padding: 30px 35px;
+        }
+        .school-header {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0b2b4b;
+            letter-spacing: -0.5px;
+            border-left: 12px solid #ffb347;
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        .student-info-panel {
+            background: #e8f0fe;
+            border-radius: 28px;
+            padding: 22px 25px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 30px;
+            align-items: center;
+            border: 1px solid #bdd3f0;
+        }
+        .info-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 18px;
+            border-radius: 40px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .info-group label {
+            font-weight: 600;
+            color: #1a3d6d;
+        }
+        select, input[type="text"] {
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            padding: 6px 0;
+            outline: none;
+            border-bottom: 2px dotted #8aa9d6;
+            min-width: 170px;
+            font-weight: 500;
+            color: #0b2b4b;
+        }
+        input[type="text"] {
+            border-bottom: 2px dotted #8aa9d6;
+            width: 200px;
+        }
+        .title-activity {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #113a5e;
+            margin: 20px 0 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(145deg, #f9e6cf, #ffffff);
+            padding: 15px;
+            border-radius: 60px;
+            border: 2px solid #ffb347;
+        }
+        .sub {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #2c4b74;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        .question-block {
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 25px 25px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 20, 50, 0.1);
+            border: 1px solid #dbe5f5;
+        }
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .question-icon {
+            font-size: 2.2rem;
+            background: #ffe0b0;
+            width: 55px;
+            height: 55px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b1530f;
+        }
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #102b47;
+        }
+        .options {
+            padding-left: 70px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f5f9ff;
+            padding: 8px 20px;
+            border-radius: 40px;
+            border: 1px solid #c8daf0;
+            transition: 0.1s;
+            cursor: pointer;
+        }
+        .option-item:hover {
+            background: #e2edff;
+        }
+        .option-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #f09b2c;
+        }
+        .option-text {
+            font-size: 1.1rem;
+        }
+        .discursive-box {
+            padding-left: 70px;
+            margin-top: 12px;
+        }
+        textarea {
+            width: 100%;
+            border: 2px solid #c0d4ed;
+            border-radius: 20px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            resize: vertical;
+            background: #fbfdff;
+        }
+        textarea:focus {
+            border-color: #ff9f4b;
+            outline: none;
+            background: #fffcf5;
+        }
+        .img-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #d9e9ff;
+            border-radius: 20px;
+            padding: 15px;
+            margin: 10px 0 15px 70px;
+            color: #1a4b79;
+            font-weight: 500;
+            gap: 12px;
+            border: 1px dashed #ffb347;
+        }
+        .img-placeholder i {
+            font-size: 3rem;
+            color: #9a6a3b;
+        }
+        .submit-area {
+            text-align: center;
+            margin: 40px 0 10px;
+        }
+        .btn-submit {
+            background: #113a5e;
+            color: white;
+            border: none;
+            font-size: 1.8rem;
+            font-weight: 700;
+            padding: 18px 50px;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #0a1f30;
+            transition: 0.07s;
+            border: 2px solid #ffb347;
+        }
+        .btn-submit:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #0a1f30;
+        }
+        .footer-note {
+            margin-top: 25px;
+            color: #3d5a78;
+            text-align: right;
+            font-size: 0.9rem;
+            border-top: 1px dashed #b3c9e5;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <!-- cabeçalho escola -->
+    <div class="school-header">E.E. LYDIA KITZ MOREIRA</div>
+
+    <!-- área do aluno com dropdowns dinâmicos -->
+    <div class="student-info-panel">
+        <div class="info-group">
+            <label><i class="fas fa-users"></i> Turma:</label>
+            <select id="turmaSelect" v-model="turmaSelecionada" @change="filtrarAlunos">
+                <option value="">Selecione</option>
+                <option value="A">6º Ano A</option>
+                <option value="B">6º Ano B</option>
+                <option value="C">6º Ano C</option>
+            </select>
+        </div>
+        <div class="info-group">
+            <label><i class="fas fa-user-graduate"></i> Nome:</label>
+            <select id="nomeSelect" v-model="alunoSelecionado" @change="preencherDados">
+                <option value="">-- escolha --</option>
+                <option v-for="a in alunosFiltrados" :key="a.email" :value="a">{{ a.nome }}</option>
+            </select>
+        </div>
+        <div class="info-group">
+            <label><i class="fas fa-hashtag"></i> Nº:</label>
+            <input type="text" id="nroChamada" v-model="numeroChamada" readonly placeholder="automático">
+        </div>
+        <div class="info-group">
+            <label><i class="fas fa-envelope"></i> E-mail:</label>
+            <input type="text" id="emailAluno" v-model="emailAluno" readonly placeholder="@al.educacao.sp.gov.br">
+        </div>
+    </div>
+
+    <!-- título atividade -->
+    <div class="title-activity">ATIVIDADE DE CIÊNCIAS <span style="font-size: 1.3rem; background: #ffe6b3; padding: 0 10px; border-radius: 30px;">1º BIMESTRE</span></div>
+    <div class="sub">🌍 origem do Universo, Sistema Solar, Terra primitiva e tempo geológico</div>
+
+    <!-- QUESTÕES (geradas com Vue) -->
+    <div id="questoesContainer">
+        <!-- será preenchido pelo Vue -->
+    </div>
+
+    <!-- botão enviar -->
+    <div class="submit-area">
+        <button class="btn-submit" @click="enviarRespostas"><i class="fas fa-cloud-upload-alt"></i> ENVIAR PARA A PLANILHA</button>
+    </div>
+    <div class="footer-note">
+        <i class="fas fa-robot"></i> respostas discursivas serão corrigidas por IA automaticamente • planilha: ATIVIDADES 6aANO LYDIA
+    </div>
+</div>
+
+<!-- Vue CDN -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+    // ------------------------------------------------------------
+    // DADOS DOS ALUNOS (extraídos da planilha 6ºAnos Lydia2.xls)
+    const alunosData = {
+        A: [
+            { num: 1, nome: 'ANA CHRYSTINA TIEKO DA PAIXAO', email: '00001158650395SP@al.educacao.sp.gov.br' },
+            { num: 2, nome: 'ANTONELLA ALVES XAVIER', email: '00001214755549SP@al.educacao.sp.gov.br' },
+            { num: 3, nome: 'ARTHUR DANIEL MASSAKI LIMA', email: '00001214837864SP@al.educacao.sp.gov.br' },
+            { num: 4, nome: 'BARBARA CRISTINA FERREIRA DA SILVA', email: '00001230203643sp@al.educacao.sp.gov.br' },
+            { num: 5, nome: 'DANIEL DA SILVA MARQUES', email: '00001158776846sp@al.educacao.sp.gov.br' },
+            { num: 6, nome: 'DAVI MENDES MARTINS', email: '' },
+            { num: 7, nome: 'DIOGO SOARES FIUZA', email: '00001206265206sp@al.educacao.sp.gov.br' },
+            { num: 8, nome: 'EDUARDA SOPHIA LOPES LIMA', email: '00001165025607SP@al.educacao.sp.gov.br' },
+            { num: 9, nome: 'ESTER VITORIA FELIX DA CRUZ', email: '00001158791963SP@al.educacao.sp.gov.br' },
+            { num: 10, nome: 'MAYSA DOS SANTOS VIEIRA', email: '00001214926794sp@al.educacao.sp.gov.br' },
+            { num: 11, nome: 'MELISSA MIRELLY OLIVEIRA DOS REIS', email: '00001165175952SP@al.educacao.sp.gov.br' },
+            { num: 12, nome: 'MURILO SARAIVA TRINDADE', email: '00001214791049SP@al.educacao.sp.gov.br' },
+            { num: 13, nome: 'PABLO LUCAS DA SILVA', email: '0000115888557XSP@al.educacao.sp.gov.br' },
+            { num: 14, nome: 'PEDRO HENRIQUE DO NASCIMENTO SANTOS', email: '00001158891143SP@al.educacao.sp.gov.br' },
+            { num: 15, nome: 'PEDRO HENRIQUE SALDANHA DE SOUZA', email: '00001158892019SP@al.educacao.sp.gov.br' },
+            { num: 16, nome: 'PEDRO LUCAS CRUZ PRIORI', email: '00001158892263SP@al.educacao.sp.gov.br' },
+            { num: 17, nome: 'PIETRO LUCAS DA SILVA', email: '0000115889367XSP@al.educacao.sp.gov.br' },
+            { num: 18, nome: 'RAFAEL ALVES ROCHA', email: '00001242511362sp@al.educacao.sp.gov.br' },
+            { num: 19, nome: 'RIQUELME SOTERO RODRIGUES', email: '00001230138705SP@al.educacao.sp.gov.br' },
+            { num: 20, nome: 'SOPHIA GIOVANA OLIVEIRA ALVES', email: '00001165213643SP@al.educacao.sp.gov.br' },
+            { num: 21, nome: 'VINICIUS BESERRA ARAUJO', email: '00001150679189SP@al.educacao.sp.gov.br' },
+            { num: 22, nome: 'CARMEN LUCIA ARDAYA PEREIRA', email: '00001260153812sp@al.educacao.sp.gov.br' },
+            { num: 23, nome: 'EDUARDA STHEFANY MARQUES DA SILVA', email: '00001147385609sp@al.educacao.sp.gov.br' },
+            { num: 24, nome: 'JORGE GABRIEL SANTOS ASSIS', email: '00001214875464sp@al.educacao.sp.gov.br' },
+            { num: 25, nome: 'BYANCA DOS SANTOS PEREIRA', email: '00001165009675sp@al.educacao.sp.gov.br' },
+            { num: 26, nome: 'GUILHERME HENRIQUE ALMEIDA DO NASCIMENTO', email: '00001223584641sp@al.educacao.sp.gov.br' },
+            { num: 27, nome: 'MATHEUS CARVALHO ROSA', email: '00001214884295SP@al.educacao.sp.gov.br' },
+            { num: 28, nome: 'PIETRO OLIVEIRA FREITAS', email: '00001239267927sp@al.educacao.sp.gov.br' },
+            { num: 29, nome: 'MARIA CLARA MOURA ROMUALDO', email: '00001259075849sp@al.educacao.sp.gov.br' },
+            { num: 30, nome: 'DAVI LUCAS DA SILVA FEITOSA', email: '00001165018640SP@al.educacao.sp.gov.br' },
+            { num: 31, nome: 'HIAGO ALEXANDRE BARBOSA DE PAULA', email: '00001166711833sp@al.educacao.sp.gov.br' },
+            { num: 32, nome: 'ENZO GABRIEL SOUZA LOPES', email: '0000115878997xsp@al.educacao.sp.gov.br' },
+            { num: 33, nome: 'VINICIUS RIBEIRO AMARAL ABRAHAO', email: '0000116522317XSP@al.educacao.sp.gov.br' },
+            { num: 34, nome: 'BERNARDO GOMES ANDRADE DE OLIVEIRA', email: '00001214940389sp@al.educacao.sp.gov.br' },
+        ],
+        B: [
+            { num: 1, nome: 'ANA CLARA BATISTA BRITO', email: '00001146933721SP@al.educacao.sp.gov.br' },
+            { num: 2, nome: 'ANNA JULIA CARVALHO MARQUES', email: '00001214874113sp@al.educacao.sp.gov.br' },
+            { num: 3, nome: 'ARTHUR DOS SANTOS NASCIMENTO', email: '00001239236657sp@al.educacao.sp.gov.br' },
+            { num: 4, nome: 'DAVI HENRIQUE SILVA DE MELO', email: '00001158779069SP@al.educacao.sp.gov.br' },
+            { num: 5, nome: 'KENNEDY GABRIEL ALVES DA SILVA', email: '00001205132582SP@al.educacao.sp.gov.br' },
+            { num: 8, nome: 'MANUELA DA SILVA XAVIER', email: '00001214796576SP@al.educacao.sp.gov.br' },
+            { num: 9, nome: 'MARIA EDUARDA FERREIRA TORRES', email: '00001202270888SP@al.educacao.sp.gov.br' },
+            { num: 10, nome: 'MATHEUS MEDEIROS DE FARIA MONZEN', email: '00001207770796SP@al.educacao.sp.gov.br' },
+            { num: 12, nome: 'MIGUEL GOUVEA CARDOSO', email: '00001214935035SP@al.educacao.sp.gov.br' },
+            { num: 13, nome: 'MIGUEL OLIVEIRA ALVES', email: '00001158877237SP@al.educacao.sp.gov.br' },
+            { num: 15, nome: 'MILLENA ALEJANDRA CARDOSO BUSTILLOS', email: '00001165182750SP@al.educacao.sp.gov.br' },
+            { num: 16, nome: 'NICOLLY EVARISTO DUTRA', email: '00001223595651SP@al.educacao.sp.gov.br' },
+            { num: 17, nome: 'SOPHIA RIBEIRO SANTOS', email: '00001165214702SP@al.educacao.sp.gov.br' },
+            { num: 18, nome: 'THAYLA EMANOELLY ANDRADE FIDELIS', email: '00001223583648SP@al.educacao.sp.gov.br' },
+            { num: 19, nome: 'WILLIAM ALVES CORAZZA', email: '00001165227721SP@al.educacao.sp.gov.br' },
+            { num: 20, nome: 'LAURA VITORIA JESUS SOUZA', email: '00001158851054sp@al.educacao.sp.gov.br' },
+            { num: 21, nome: 'DAVI LUIZ CARDOSO BARBOSA', email: '0000115878112xsp@al.educacao.sp.gov.br' },
+            { num: 22, nome: 'PIETRO GABRIEL VIEIRA DA SILVA', email: '00001153137264SP@al.educacao.sp.gov.br' },
+            { num: 23, nome: 'MARIA EDUARDA RIBEIRO DE OLIVEIRA ROCHA', email: '00001214908135sp@al.educacao.sp.gov.br' },
+            { num: 24, nome: 'RICHARD SAMUEL PEREIRA NASCIMENTO', email: '00001214959817SP@al.educacao.sp.gov.br' },
+            { num: 25, nome: 'ESTHER ARAUJO DE OLIVEIRA', email: '00001206732696SP@al.educacao.sp.gov.br' },
+            { num: 26, nome: 'VITORIA YASMIN FIRMINO DE OLIVEIRA', email: '00001214940390SP@al.educacao.sp.gov.br' },
+            { num: 27, nome: 'ELOAH OLIVEIRA DE SOUZA', email: '00001254730618sp@al.educacao.sp.gov.br' },
+            { num: 28, nome: 'NICOLE FERREIRA SANTOS', email: '00001158884047SP@al.educacao.sp.gov.br' },
+            { num: 29, nome: 'SARA CAROLINE FONSECA PORFIRIO', email: '0000121622237xsp@al.educacao.sp.gov.br' },
+            { num: 30, nome: 'MILLENA OLIVEIRA DOS SANTOS', email: '00001150701365SP@al.educacao.sp.gov.br' },
+            { num: 31, nome: 'JAMILY FERNANDA GONZALES ADUVIRI', email: '00001153647679SP@al.educacao.sp.gov.br' },
+            { num: 32, nome: 'MIGUEL SILVA SOUZA', email: '00001165180492SP@al.educacao.sp.gov.br' },
+            { num: 33, nome: 'MARIA LUIZA ALVES DA SILVA', email: '00001239240843sp@al.educacao.sp.gov.br' },
+            { num: 34, nome: 'ANA CLARA DOS SANTOS BRANDAO', email: '00001223588555SP@al.educacao.sp.gov.br' },
+            { num: 36, nome: 'MARINA THEODORA FERREIRA BROTA', email: '00001158871685SP@al.educacao.sp.gov.br' },
+            { num: 38, nome: 'PABLO HENRIQUE SANTOS RODRIGUES', email: '00001158886354SP@al.educacao.sp.gov.br' },
+            { num: 39, nome: 'ALICE ALVES BRITO DA COSTA', email: '00001157103455SP@al.educacao.sp.gov.br' },
+        ],
+        C: [
+            { num: 1, nome: 'AMANDA MENDES DE SOUZA JOSÉ', email: '00001203854122SP@al.educacao.sp.gov.br' },
+            { num: 2, nome: 'ARTHUR GOMES MINZÉ', email: '00001206277324SP@al.educacao.sp.gov.br' },
+            { num: 3, nome: 'BRAYAN DE OLIVEIRA LOPES', email: '00001165008300sp@al.educacao.sp.gov.br' },
+            { num: 5, nome: 'DAVI LUCAS MATIAS RIBEIRO', email: '00001165019024sp@al.educacao.sp.gov.br' },
+            { num: 6, nome: 'GEOVANA SALDANHA DOS SANTOS', email: '00001165044717sp@al.educacao.sp.gov.br' },
+            { num: 8, nome: 'HEIDY ALISON CONDORI APAZA', email: '' },
+            { num: 9, nome: 'ISABELLY DE OLIVEIRA SANTOS', email: '00001214848709SP@al.educacao.sp.gov.br' },
+            { num: 10, nome: 'JOHN GRIGORIO SILVA', email: '00001165262484SP@al.educacao.sp.gov.br' },
+            { num: 11, nome: 'LAVINIA LIUS DE ALMEIDA MORAES', email: '00001164936062SP@al.educacao.sp.gov.br' },
+            { num: 12, nome: 'MANUELLA DE MORAES SILVA', email: '00001165293705sp@al.educacao.sp.gov.br' },
+            { num: 13, nome: 'NATAN CASTRO DE CARVALHO', email: '00001213049404sp@al.educacao.sp.gov.br' },
+            { num: 14, nome: 'NICOLLY SANTOS NUNES', email: '00001158885532SP@al.educacao.sp.gov.br' },
+            { num: 15, nome: 'PIETRO SOUZA SANTOS', email: '00001165198307SP@al.educacao.sp.gov.br' },
+            { num: 16, nome: 'PIETTRO SORRILHA SOUZA', email: '00001214814657SP@al.educacao.sp.gov.br' },
+            { num: 17, nome: 'VALENTINA RODRIGUES BOMFIM', email: '00001229863849sp@al.educacao.sp.gov.br' },
+            { num: 18, nome: 'VICTOR JUNIOR TENORIO COSTA', email: '00001214927634sp@al.educacao.sp.gov.br' },
+            { num: 19, nome: 'WALLISON GABRIEL DA SILVA', email: '00001244664273SP@al.educacao.sp.gov.br' },
+            { num: 20, nome: 'MARIA CLARA DE SOUZA LOPES', email: '00001230011717sp@al.educacao.sp.gov.br' },
+            { num: 21, nome: 'ANA JULIA DE SOUZA LOPES', email: '00001214947682sp@al.educacao.sp.gov.br' },
+            { num: 22, nome: 'TAYANK ROBER LIMACHI CHOQUE', email: '00001158909160sp@al.educacao.sp.gov.br' },
+            { num: 23, nome: 'SOFIA GOMES DANTAS', email: '00001223579657sp@al.educacao.sp.gov.br' },
+            { num: 24, nome: 'NICOLLE MARQUES DA SILVA', email: '00001223595390SP@al.educacao.sp.gov.br' },
+            { num: 25, nome: 'MIQUEIAS PAULINO SILVA', email: '00001150683387SP@al.educacao.sp.gov.br' },
+            { num: 27, nome: 'RAFAELA FARIA SILVA', email: '00001218585894sp@al.educacao.sp.gov.br' },
+            { num: 29, nome: 'LUAN HENRIQUE BERNEGOSSO DA CRUZ', email: '00001214850996sp@al.educacao.sp.gov.br' },
+            { num: 30, nome: 'MIQUEIAS DEL VALLE ISAIAS MAGALHAES', email: '00001165182944sp@al.educacao.sp.gov.br' },
+            { num: 31, nome: 'KAROLINA APARECIDA DE LIRA', email: '00001230136010SP@al.educacao.sp.gov.br' },
+            { num: 32, nome: 'KAMILY GABRIELLY SOARES XAVIER', email: '00001163578009SP@al.educacao.sp.gov.br' },
+            { num: 33, nome: 'MATEUS HENRIQUE SOUSA SANTOS', email: '00001158872987SP@al.educacao.sp.gov.br' },
+            { num: 34, nome: 'DAVI SOUSA OLIVEIRA', email: '00001165022400sp@al.educacao.sp.gov.br' },
+            { num: 36, nome: 'FELIPE GABRIEL ALVES ARAUJO', email: '00001155562628SP@al.educacao.sp.gov.br' },
+            { num: 37, nome: 'CARLOS HENRIQUE ROSA PAULINO', email: '00001150669135sp@al.educacao.sp.gov.br' },
+            { num: 38, nome: 'DAVI LUCAS DE SOUZA SILVA', email: '00001158779859SP@al.educacao.sp.gov.br' },
+        ]
+    };
+
+    // Questões (5 objetivas, 5 discursivas) com imagens implícitas nos ícones
+    const questoes = [
+        // MÚLTIPLA ESCOLHA (0-4)
+        { tipo: 'obj', pergunta: 'Observe a imagem da expansão do balão (simulação do Universo). O que acontece com a distância entre dois pontos quando o balão infla?', 
+          img: '<i class="fas fa-balloon"></i>  balão vazio → balão cheio', alternativas: ['A distância diminui', 'A distância permanece igual', 'A distância aumenta', 'A distância primeiro aumenta depois diminui'], correta: 2 },
+        { tipo: 'obj', pergunta: 'Na representação do Sistema Solar, qual corpo celeste é classificado como LUMINOSO?', 
+          img: '<i class="fas fa-sun"></i>  Sol e planetas', alternativas: ['Terra', 'Lua', 'Sol', 'Marte'], correta: 2 },
+        { tipo: 'obj', pergunta: 'A Terra primitiva formou-se a partir da união de pequenos corpos chamados:', 
+          img: '<i class="fas fa-meteor"></i>  choque de asteroides', alternativas: ['cometas', 'planetesimais', 'estrelas', 'meteoritos'], correta: 1 },
+        { tipo: 'obj', pergunta: 'Qual é a unidade de tempo MAIS adequada para medir a formação dos oceanos na Terra (ocorrida há bilhões de anos)?', 
+          img: '<i class="fas fa-hourglass-half"></i>  tempo geológico vs histórico', alternativas: ['séculos', 'décadas', 'milhões de anos', 'dias'], correta: 2 },
+        { tipo: 'obj', pergunta: 'As primeiras rochas sólidas surgiram na Terra há cerca de 4 bilhões de anos. Que tipo de rocha está diretamente associada à fossilização?', 
+          img: '<i class="fas fa-dragon"></i>  fóssil em camada', alternativas: ['magmáticas', 'metamórficas', 'sedimentares', 'ígneas'], correta: 2 },
+        // DISCURSIVAS (5-9)
+        { tipo: 'dis', pergunta: 'Explique a diferença entre hipótese e teoria científica. Use um exemplo do seu dia a dia para ilustrar cada uma.', 
+          img: '<i class="fas fa-flask"></i>  cientista testando ideia' },
+        { tipo: 'dis', pergunta: 'A teoria do Big Bang afirma que o Universo está em expansão. Como a atividade do balão (com pontos desenhados) ajuda a entender essa ideia? Descreva a relação.', 
+          img: '<i class="fas fa-expand-alt"></i>  pontos se afastando' },
+        { tipo: 'dis', pergunta: 'Compare um planeta rochoso (ex: Terra) com um planeta gasoso (ex: Júpiter) quanto à composição, posição no Sistema Solar e presença de anéis.', 
+          img: '<i class="fas fa-globe-americas"></i>  + <i class="fas fa-saturn"></i>' },
+        { tipo: 'dis', pergunta: 'Por que a atmosfera primitiva era tão diferente da atual? Cite o papel dos seres fotossintetizantes nessa transformação.', 
+          img: '<i class="fas fa-leaf"></i>  primeiros oceanos' },
+        { tipo: 'dis', pergunta: 'Se a história da Terra (4,6 bilhões de anos) fosse comprimida em 24 horas, os dinossauros seriam extintos perto da meia-noite. O que essa comparação revela sobre o tempo geológico em relação à existência humana?', 
+          img: '<i class="fas fa-clock"></i>  relógio da Terra' }
+    ];
+
+    new Vue({
+        el: '#app',
+        data: {
+            turmaSelecionada: '',
+            alunoSelecionado: null,
+            numeroChamada: '',
+            emailAluno: '',
+            alunosFiltrados: [],
+            questoes: questoes,
+            respostas: [] // guarda escolhas obj e textos discursivos
+        },
+        mounted() {
+            this.inicializarRespostas();
+        },
+        methods: {
+            filtrarAlunos() {
+                this.alunosFiltrados = this.turmaSelecionada ? alunosData[this.turmaSelecionada] : [];
+                this.alunoSelecionado = null;
+                this.numeroChamada = '';
+                this.emailAluno = '';
+            },
+            preencherDados() {
+                if (this.alunoSelecionado) {
+                    this.numeroChamada = this.alunoSelecionado.num;
+                    this.emailAluno = this.alunoSelecionado.email || '(e-mail não cadastrado)';
+                } else {
+                    this.numeroChamada = '';
+                    this.emailAluno = '';
+                }
+            },
+            inicializarRespostas() {
+                // cria vetor de respostas vazio
+                for (let i = 0; i < this.questoes.length; i++) {
+                    if (this.questoes[i].tipo === 'obj') {
+                        this.respostas[i] = { tipo: 'obj', escolha: null };
+                    } else {
+                        this.respostas[i] = { tipo: 'dis', texto: '' };
+                    }
+                }
+            },
+            enviarRespostas() {
+                if (!this.alunoSelecionado || !this.turmaSelecionada) {
+                    alert('Por favor, selecione turma e nome do aluno.');
+                    return;
+                }
+                // montar payload para Google Sheets (simulação)
+                const payload = {
+                    timestamp: new Date().toISOString(),
+                    turma: '6ºAno ' + this.turmaSelecionada,
+                    aluno: this.alunoSelecionado.nome,
+                    numero: this.numeroChamada,
+                    email: this.emailAluno,
+                    respostas: this.respostas.map((r, idx) => {
+                        if (r.tipo === 'obj') {
+                            return { questao: idx+1, tipo: 'ME', resposta: r.escolha !== null ? this.questoes[idx].alternativas[r.escolha] : '(não respondida)' };
+                        } else {
+                            return { questao: idx+1, tipo: 'DIS', resposta: r.texto || '(em branco)' };
+                        }
+                    })
+                };
+                console.log('Dados a serem enviados:', payload);
+
+                // Simulação de correção IA para discursivas: feedback placeholder
+                alert('✅ Respostas registradas (simulação).\n\nAs questões discursivas seriam corrigidas por IA e o resultado enviado para a planilha ID: 1F1qUYkW9--r8U2eCHvOpruZue-HdQRh9T5HroiE5Rws\n\n(console.log mostra o payload)');
+
+                // Aqui poderia haver um fetch para o Google Apps Script
+                /*
+                fetch('https://script.google.com/macros/s/.../exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(payload)
+                })
+                */
+            }
+        },
+        template: `
+            <div>
+                <div v-for="(q, idx) in questoes" :key="idx" class="question-block">
+                    <div class="question-header">
+                        <span class="question-icon">{{ idx+1 }}</span>
+                        <span class="question-text">{{ q.pergunta }}</span>
+                    </div>
+                    <!-- imagem -->
+                    <div class="img-placeholder" v-html="q.img"></div>
+                    
+                    <!-- múltipla escolha -->
+                    <div v-if="q.tipo === 'obj'" class="options">
+                        <label v-for="(alt, i) in q.alternativas" :key="i" class="option-item">
+                            <input type="radio" :name="'q'+idx" :value="i" v-model.number="respostas[idx].escolha">
+                            <span class="option-text">{{ alt }}</span>
+                        </label>
+                    </div>
+                    
+                    <!-- discursiva -->
+                    <div v-else class="discursive-box">
+                        <textarea rows="4" v-model="respostas[idx].texto" placeholder="Digite sua resposta (será avaliada por IA)..."></textarea>
+                    </div>
+                </div>
+            </div>
+        `
+    });
+</script>
+</body>
+</html>
