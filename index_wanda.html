@@ -470,7 +470,48 @@
                         }
                     })
                 },
+                mounted() {
+                    // Carregar dados salvos
+                    const saved = localStorage.getItem('respostas_ciencias_6ano_wanda');
+                    if (saved) {
+                        try {
+                            const parsed = JSON.parse(saved);
+                            this.turmaSelecionada = parsed.turma || '';
+                            this.filtrarAlunos();
+                            this.alunoSelecionado = parsed.aluno || null;
+                            this.preencherDados();
+                            if (parsed.respostas) {
+                                parsed.respostas.forEach((r, i) => {
+                                    if (this.respostas[i]) {
+                                        this.respostas[i].escolha = r.escolha;
+                                        this.respostas[i].texto = r.texto;
+                                    }
+                                });
+                            }
+                        } catch (e) {
+                            console.error("Erro ao carregar cache local", e);
+                        }
+                    }
+                },
+                watch: {
+                    respostas: {
+                        deep: true,
+                        handler() {
+                            this.salvarContextoLocal();
+                        }
+                    },
+                    turmaSelecionada() { this.salvarContextoLocal(); },
+                    alunoSelecionado() { this.salvarContextoLocal(); }
+                },
                 methods: {
+                    salvarContextoLocal() {
+                        const data = {
+                            turma: this.turmaSelecionada,
+                            aluno: this.alunoSelecionado,
+                            respostas: this.respostas
+                        };
+                        localStorage.setItem('respostas_ciencias_6ano_wanda', JSON.stringify(data));
+                    },
                     filtrarAlunos() {
                         this.alunosFiltrados = this.turmaSelecionada ? alunosData[this.turmaSelecionada] : [];
                         this.alunoSelecionado = null;
@@ -533,7 +574,8 @@
                             body: JSON.stringify(payload)
                         })
                             .then(() => {
-                                alert('✅ Sucesso! Suas respostas foram enviadas para correção por IA e gravadas na planilha.\n\nVerifique a aba "ATIVIDADES 6aANO WANDA MASCAGNI" e a aba "Gráficos".');
+                                alert('✅ Sucesso! Suas respostas foram enviadas para correção por IA e gravadas na planilha.\n\nVerifique a aba "ATIVIDADES 6aANO WANDA MASCAGNI" e a aba "Gráficos - Wanda".');
+                                localStorage.removeItem('respostas_ciencias_6ano_wanda');
                                 this.excluirRespostas(false); // Limpar após sucesso sem confirmar
                             })
                             .catch(err => {
@@ -554,6 +596,7 @@
                                 }
                             });
                             alert('Todas as respostas foram excluídas.');
+                            localStorage.removeItem('respostas_ciencias_6ano_wanda');
                         }
                     }
                 }
