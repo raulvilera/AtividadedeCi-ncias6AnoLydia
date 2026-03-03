@@ -11,39 +11,64 @@ const GEMINI_API_KEY = 'SUA_CHAVE_API_AQUI'; // <--- INSIRA SUA CHAVE DO GOOGLE 
  */
 function doPost(e) {
   try {
-    const data = JSON.parse(e.postData.getDataAsString());
+    // Tenta ler o corpo da requisição de várias formas para garantir compatibilidade
+    let contents = "";
+    if (e.postData.getDataAsString) {
+      contents = e.postData.getDataAsString();
+    } else if (e.postData.contents) {
+      contents = e.postData.contents;
+    }
+    
+    const data = JSON.parse(contents);
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     
-    let mainSheetName = 'ATIVIDADES 6ªANO LYDIA';
+    // Identificar escola e nome base da aba
+    let schoolLabel = 'LYDIA';
     if (data.escola === 'Wanda') {
-      mainSheetName = 'ATIVIDADES 6ªANO WANDA MASCAGNI';
+      schoolLabel = 'WANDA';
     }
 
-    let sheet = ss.getSheetByName(mainSheetName);
+    // Busca Robusta de Aba: Procura por nome parcial (ex: "ATIVIDADES" e "LYDIA")
+    let sheet = null;
+    const allSheets = ss.getSheets();
+    for (let s of allSheets) {
+      const name = s.getName().toUpperCase();
+      if (name.includes('ATIVIDADES') && name.includes(schoolLabel)) {
+        sheet = s;
+        break;
+      }
+    }
     
+    // Se não achou, cria com nome padrão
     if (!sheet) {
-      sheet = ss.insertSheet(mainSheetName);
+      const defaultName = schoolLabel === 'LYDIA' ? 'ATIVIDADES 6ªANO LYDIA' : 'ATIVIDADES 6ªANO WANDA MASCAGNI';
+      sheet = ss.insertSheet(defaultName);
       sheet.appendRow(['Data/Hora', 'Turma', 'Nº', 'Nome', 'E-mail', 'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6 (IA)', 'Q7 (IA)', 'Q8 (IA)', 'Q9 (IA)', 'Q10 (IA)', 'Status Habilidades', 'Apontamentos']);
     }
 
     // Separar respostas objetivas (1-5) e discursivas (6-10)
-    const respObj = data.respostas.slice(0, 5).map(r => r.resposta);
-    const respDis = data.respostas.slice(5, 10).map(r => r.resposta);
+    const respObj = data.respostas.slice(0, 5).map(r => r.resposta || "");
+    const respDis = data.respostas.slice(5, 10).map(r => r.resposta || "");
 
     // Corrigir discursivas com IA
     const correcaoIA = corrigirComIA(respDis);
     
+    // Garantir que temos 5 notas (Atingida/Não Atingida)
+    while (correcaoIA.notas.length < 5) {
+      correcaoIA.notas.push("Não Avaliado");
+    }
+
     // Montar a linha para a planilha
     const newRow = [
-      data.timestamp,
-      data.turma,
-      data.numero,
-      data.aluno,
-      data.email,
+      data.timestamp || new Date().toLocaleString('pt-BR'),
+      data.turma || "Não informada",
+      data.numero || "",
+      data.aluno || "Anônimo",
+      data.email || "",
       ...respObj,
-      ...correcaoIA.notas, // Respostas corrigidas pela IA (Ex: "Atingida" ou "Não Atingida")
-      correcaoIA.statusGeral,
-      correcaoIA.apontamentos
+      ...correcaoIA.notas,
+      correcaoIA.statusGeral || "Pendente",
+      correcaoIA.apontamentos || ""
     ];
 
     sheet.appendRow(newRow);
@@ -51,7 +76,7 @@ function doPost(e) {
     // Atualizar Gráficos passando a escola
     atualizarGraficos(ss, data.escola);
 
-    return ContentService.createTextOutput(JSON.stringify({ status: 'success', message: 'Respostas registradas e corrigidas com sucesso!' }))
+    return ContentService.createTextOutput(JSON.stringify({ status: 'success', message: 'Respostas registradas com sucesso!' }))
       .setMimeType(ContentService.MimeType.JSON);
 
   } catch (error) {
@@ -61,46 +86,36 @@ function doPost(e) {
 }
 
 /**
- * Simula ou chama a API do Gemini para corrigir as questões de acordo com o Guia Priorizado SP
+ * Chama a API do Gemini para corrigir as questões
  */
 function corrigirComIA(respostasDiscursivas) {
   const prompt = `
     Você é um professor de Ciências avaliando alunos do 6º ano de acordo com o Guia Priorizado do Estado de São Paulo.
     Avalie as seguintes 5 respostas discursivas sobre: Hipótese/Teoria, Big Bang, Planetas, Atmosfera Primitiva e Tempo Geológico.
     Para cada resposta, determine se a habilidade foi "Atingida" ou "Não Atingida".
-    Baseie-se na clareza científica e nos conceitos do currículo paulista.
-    
+    Retorne APENAS um JSON no formato:
+    {
+      "notas": ["Atingida", "Atingida", ...],
+      "apontamentos": "Texto resumido com dicas pedagógicas para o aluno."
+    }
+
     Respostas do Aluno:
     1. ${respostasDiscursivas[0]}
     2. ${respostasDiscursivas[1]}
     3. ${respostasDiscursivas[2]}
     4. ${respostasDiscursivas[3]}
     5. ${respostasDiscursivas[4]}
-
-    Retorne APENAS um JSON no formato:
-    {
-      "notas": ["Atingida", "Atingida", ...],
-      "apontamentos": "Texto resumido com dicas pedagógicas para o aluno sobre as competências não atingidas."
-    }
   `;
 
   try {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-    const payload = {
-      contents: [{ parts: [{ text: prompt }] }]
-    };
-    
-    const options = {
-      method: 'post',
-      contentType: 'application/json',
-      payload: JSON.stringify(payload)
-    };
+    const payload = { contents: [{ parts: [{ text: prompt }] }] };
+    const options = { method: 'post', contentType: 'application/json', payload: JSON.stringify(payload) };
     
     const response = UrlFetchApp.fetch(url, options);
     const jsonRes = JSON.parse(response.getContentText());
     const candidates = jsonRes.candidates[0].content.parts[0].text;
     
-    // Limpar possíveis marcações de markdown do JSON
     const cleanJson = candidates.replace(/```json|```/g, '').trim();
     const result = JSON.parse(cleanJson);
     
@@ -109,7 +124,6 @@ function corrigirComIA(respostasDiscursivas) {
     
     return result;
   } catch (e) {
-    // Fallback caso a API falhe
     return { 
       notas: ["Erro IA", "Erro IA", "Erro IA", "Erro IA", "Erro IA"], 
       statusGeral: "Erro na correção automática",
@@ -119,39 +133,43 @@ function corrigirComIA(respostasDiscursivas) {
 }
 
 /**
- * Cria ou atualiza a aba de Gráficos com gráficos de rosca por turma
+ * Cria ou atualiza a aba de Gráficos
  */
 function atualizarGraficos(ss, escola) {
-  let mainSheetName = 'ATIVIDADES 6ªANO LYDIA';
-  let graphSheetName = 'Gráficos - Lydia';
-  let turmas = ['6ºAno A', '6ºAno B', '6ºAno C'];
+  let label = 'LYDIA';
+  if (escola === 'Wanda') label = 'WANDA';
 
-  if (escola === 'Wanda') {
-    mainSheetName = 'ATIVIDADES 6ªANO WANDA MASCAGNI';
-    graphSheetName = 'Gráficos - Wanda';
-    turmas = ['6ºAno B', '6ºAno C'];
+  // Buscar aba de dados correta de forma flexível
+  let dataSheet = null;
+  const allSheets = ss.getSheets();
+  for (let s of allSheets) {
+    const name = s.getName().toUpperCase();
+    if (name.includes('ATIVIDADES') && name.includes(label)) {
+      dataSheet = s;
+      break;
+    }
   }
-
-  let graphSheet = ss.getSheetByName(graphSheetName);
-  if (!graphSheet) {
-    graphSheet = ss.insertSheet(graphSheetName);
-  } else {
-    graphSheet.clear();
-    // Remover gráficos antigos
-    const charts = graphSheet.getCharts();
-    charts.forEach(c => graphSheet.removeChart(c));
-  }
-
-  const dataSheet = ss.getSheetByName(mainSheetName);
   if (!dataSheet) return;
 
+  // Buscar aba de gráficos correspondente
+  let graphSheetName = `Gráficos - ${label.charAt(0) + label.slice(1).toLowerCase()}`;
+  let graphSheet = ss.getSheetByName(graphSheetName);
+  if (!graphSheet) graphSheet = ss.insertSheet(graphSheetName);
+  
+  graphSheet.clear();
+  graphSheet.getCharts().forEach(c => graphSheet.removeChart(c));
+
   const values = dataSheet.getDataRange().getValues();
-  if (values.length <= 1) return; // Só tem cabeçalho ou vazio
-  const rawData = values.slice(1); // Remover cabeçalho
+  if (values.length <= 1) return;
+  const rawData = values.slice(1);
+
+  const turmasLydia = ['6ºAno A', '6ºAno B', '6ºAno C'];
+  const turmasWanda = ['6ºAno B', '6ºAno C'];
+  const turmas = label === 'LYDIA' ? turmasLydia : turmasWanda;
 
   let currentTitleRow = 1;
 
-  turmas.forEach((turma, index) => {
+  turmas.forEach((turma) => {
     const turmaData = rawData.filter(r => r[1] === turma);
     if (turmaData.length === 0) return;
 
@@ -159,14 +177,12 @@ function atualizarGraficos(ss, escola) {
     let totalNaoAtingidas = 0;
 
     turmaData.forEach(row => {
-      // Analisar colunas de Q6 a Q10 (índices 10 a 14)
       for (let i = 10; i <= 14; i++) {
         if (row[i] === 'Atingida') totalAtingidas++;
         else totalNaoAtingidas++;
       }
     });
 
-    // Escrever dados para o gráfico na aba de gráficos (escondido ou lateral)
     const startRow = currentTitleRow + 1;
     graphSheet.getRange(currentTitleRow, 1).setValue(`Resumo de Habilidades - ${turma}`).setFontWeight('bold');
     graphSheet.getRange(startRow, 1).setValue('Status');
@@ -176,17 +192,16 @@ function atualizarGraficos(ss, escola) {
     graphSheet.getRange(startRow + 2, 1).setValue('Não Atingidas');
     graphSheet.getRange(startRow + 2, 2).setValue(totalNaoAtingidas);
 
-    // Criar Gráfico de Rosca
     const chart = graphSheet.newChart()
       .setChartType(Charts.ChartType.PIE)
       .addRange(graphSheet.getRange(startRow + 1, 1, 2, 2))
       .setPosition(currentTitleRow, 4, 0, 0)
       .setOption('title', `Habilidades ${turma}`)
-      .setOption('pieHole', 0.4) // Efeito Rosca
+      .setOption('pieHole', 0.4)
       .setOption('colors', ['#4CAF50', '#F44336'])
       .build();
 
     graphSheet.insertChart(chart);
-    currentTitleRow += 15; // Pular espaço para o próximo gráfico
+    currentTitleRow += 15;
   });
 }

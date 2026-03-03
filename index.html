@@ -642,8 +642,7 @@
                         })
                             .then(() => {
                                 alert('✅ Sucesso! Suas respostas foram enviadas para correção por IA e gravadas na planilha.\n\nVerifique a aba "ATIVIDADES 6ªANO LYDIA" e a aba "Gráficos - Lydia".');
-                                localStorage.removeItem('respostas_ciencias_6ano_lydia');
-                                this.excluirRespostas(false); // Limpar após sucesso sem confirmar
+                                this.excluirRespostasSilencioso(); // Versão sem nenhum alerta
                             })
                             .catch(err => {
                                 console.error(err);
@@ -653,18 +652,21 @@
                                 this.enviando = false;
                             });
                     },
-                    excluirRespostas(confirmar = true) {
-                        if (!confirmar || confirm('Tem certeza que deseja limpar todas as respostas?')) {
-                            this.respostas = this.questoes.map(q => {
-                                if (q.tipo === 'obj') {
-                                    return { tipo: 'obj', escolha: null };
-                                } else {
-                                    return { tipo: 'dis', texto: '' };
-                                }
-                            });
-                            if (confirmar) alert('Todas as respostas foram excluídas.');
-                            localStorage.removeItem('respostas_ciencias_6ano_lydia');
+                    excluirRespostas() {
+                        if (confirm('Tem certeza que deseja limpar todas as respostas?')) {
+                            this.excluirRespostasSilencioso();
+                            alert('Todas as respostas foram excluídas.');
                         }
+                    },
+                    excluirRespostasSilencioso() {
+                        this.respostas = this.questoes.map(q => {
+                            if (q.tipo === 'obj') {
+                                return { tipo: 'obj', escolha: null };
+                            } else {
+                                return { tipo: 'dis', texto: '' };
+                            }
+                        });
+                        localStorage.removeItem('respostas_ciencias_6ano_lydia');
                     }
                 }
             });
