@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E.E. Wanda Mascagni de Sá – Ciências 6º ano</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: #f0f4fa;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 10, 30, 0.15);
+            padding: 30px 35px;
+        }
+
+        .school-header {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0b2b4b;
+            letter-spacing: -0.5px;
+            border-left: 12px solid #ffb347;
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .student-info-panel {
+            background: #e8f0fe;
+            border-radius: 28px;
+            padding: 22px 25px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 20px;
+            align-items: center;
+            border: 1px solid #bdd3f0;
+        }
+
+        .info-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 18px;
+            border-radius: 40px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            flex: 1 1 auto;
+            min-width: 250px;
+        }
+
+        .info-group label {
+            font-weight: 600;
+            color: #1a3d6d;
+            white-space: nowrap;
+        }
+
+        select,
+        input[type="text"] {
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            padding: 6px 0;
+            outline: none;
+            border-bottom: 2px dotted #8aa9d6;
+            font-weight: 500;
+            color: #0b2b4b;
+            width: 100%;
+            min-width: 200px;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        input[readonly] {
+            background-color: transparent;
+            cursor: default;
+        }
+
+        .title-activity {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #113a5e;
+            margin: 20px 0 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(145deg, #f9e6cf, #ffffff);
+            padding: 15px;
+            border-radius: 60px;
+            border: 2px solid #ffb347;
+        }
+
+        .sub {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #2c4b74;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        .question-block {
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 25px 25px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 20, 50, 0.1);
+            border: 1px solid #dbe5f5;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .question-icon {
+            font-size: 2.2rem;
+            background: #ffe0b0;
+            width: 55px;
+            height: 55px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b1530f;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #102b47;
+        }
+
+        .options {
+            padding-left: 70px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f5f9ff;
+            padding: 8px 20px;
+            border-radius: 40px;
+            border: 1px solid #c8daf0;
+            transition: 0.1s;
+            cursor: pointer;
+        }
+
+        .option-item:hover {
+            background: #e2edff;
+        }
+
+        .option-item.selected {
+            background: #1a3d6d;
+            color: white;
+            border-color: #0e2a4a;
+            box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .option-item.selected .option-text {
+            color: white;
+        }
+
+        .option-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #f09b2c;
+        }
+
+        .option-text {
+            font-size: 1.1rem;
+            color: inherit;
+        }
+
+        .discursive-box {
+            padding-left: 70px;
+            margin-top: 12px;
+        }
+
+        textarea {
+            width: 100%;
+            border: 2px solid #c0d4ed;
+            border-radius: 20px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            resize: vertical;
+            background: #fbfdff;
+        }
+
+        textarea:focus {
+            border-color: #ff9f4b;
+            outline: none;
+            background: #fffcf5;
+        }
+
+        .img-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #d9e9ff;
+            border-radius: 20px;
+            padding: 15px;
+            margin: 10px 0 15px 70px;
+            color: #1a4b79;
+            font-weight: 500;
+            gap: 12px;
+            border: 1px dashed #ffb347;
+        }
+
+        .img-placeholder i {
+            font-size: 3rem;
+            color: #9a6a3b;
+        }
+
+        .submit-area {
+            text-align: center;
+            margin: 40px 0 10px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding: 12px 25px;
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #0a1f30;
+            transition: 0.07s;
+            border: 2px solid #ffb347;
+            color: white;
+        }
+
+        .btn-submit {
+            background: #113a5e;
+        }
+
+        .btn-submit:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #0a1f30;
+        }
+
+        .btn-delete {
+            background: #b22222;
+            box-shadow: 0 5px 0 #6d0e0e;
+        }
+
+        .btn-delete:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #6d0e0e;
+        }
+
+        .footer-note {
+            margin-top: 25px;
+            color: #3d5a78;
+            text-align: right;
+            font-size: 0.9rem;
+            border-top: 1px dashed #b3c9e5;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="app">
+        <div class="school-header">E.E. WANDA MASCAGNI DE SÁ</div>
+
+        <div class="student-info-panel">
+            <div class="info-group">
+                <label><i class="fas fa-users"></i> Turma:</label>
+                <select v-model="turmaSelecionada" @change="filtrarAlunos">
+                    <option value="">Selecione</option>
+                    <option value="B">6º Ano B</option>
+                    <option value="C">6º Ano C</option>
+                </select>
+            </div>
+            <div class="info-group">
+                <label><i class="fas fa-user-graduate"></i> Nome:</label>
+                <select v-model="alunoSelecionado" @change="preencherDados">
+                    <option value="">-- escolha --</option>
+                    <option v-for="a in alunosFiltrados" :key="a.nome" :value="a">{{ a.nome }}</option>
+                </select>
+            </div>
+            <div class="info-group">
+                <label><i class="fas fa-hashtag"></i> Nº:</label>
+                <input type="text" v-model="numeroChamada" readonly placeholder="automático">
+            </div>
+            <div class="info-group">
+                <label><i class="fas fa-envelope"></i> E-mail:</label>
+                <input type="text" v-model="emailAluno" readonly placeholder="@al.educacao.sp.gov.br">
+            </div>
+        </div>
+
+        <div class="title-activity">ATIVIDADE DE CIÊNCIAS <span
+                style="font-size: 1.3rem; background: #ffe6b3; padding: 0 10px; border-radius: 30px;">1º BIMESTRE</span>
+        </div>
+        <div class="sub">🌍 origem do Universo, Sistema Solar, Terra primitiva e tempo geológico</div>
+
+        <!-- QUESTÕES -->
+        <div v-for="(q, idx) in questoes" :key="idx" class="question-block">
+            <div class="question-header">
+                <span class="question-icon">{{ idx+1 }}</span>
+                <span class="question-text">{{ q.pergunta }}</span>
+            </div>
+            <div class="img-placeholder" v-html="q.img"></div>
+
+            <div v-if="q.tipo === 'obj'" class="options">
+                <label v-for="(alt, i) in q.alternativas" :key="i" class="option-item"
+                    :class="{ selected: respostas[idx].escolha === i }">
+                    <input type="radio" :name="'q'+idx" :value="i" v-model="respostas[idx].escolha">
+                    <span class="option-text">{{ alt }}</span>
+                </label>
+            </div>
+
+            <div v-else class="discursive-box">
+                <textarea rows="4" v-model="respostas[idx].texto"
+                    placeholder="Digite sua resposta (será avaliada por IA)..."></textarea>
+            </div>
+        </div>
+
+        <div class="submit-area">
+            <button class="btn btn-submit" @click="enviarRespostas" :disabled="enviando">
+                <i class="fas" :class="enviando ? 'fa-spinner fa-spin' : 'fa-cloud-upload-alt'"></i>
+                {{ enviando ? 'ENVIANDO E CORRIGINDO...' : 'ENVIAR' }}
+            </button>
+            <button class="btn btn-delete" @click="excluirRespostas" :disabled="enviando"><i
+                    class="fas fa-trash-alt"></i> EXCLUIR</button>
+        </div>
+        <div class="footer-note">
+            <i class="fas fa-robot"></i> respostas discursivas serão corrigidas por IA automaticamente • planilha:
+            ATIVIDADES 6aANO WANDA MASCAGNI
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        (function () {
+            // ---------- DADOS DOS ALUNOS ----------
+            const alunosData = {
+                B: [
+                    { num: 1, nome: 'ANA CLARA CORREA PINTO', email: '' },
+                    { num: 2, nome: 'ELIZA RUYZ DE OLIVEIRA', email: '' },
+                    { num: 3, nome: 'JOAO PIETRO ROCHA OLIVEIRA', email: '' },
+                    { num: 4, nome: 'MANUELLA GONCALVES DA SILVA', email: '' },
+                    { num: 5, nome: 'MARIA EDUARDA ARAUJO GARRIDO', email: '' },
+                    { num: 6, nome: 'UELITON VIEIRA DA SILVA', email: '' },
+                    { num: 7, nome: 'VALENTINA DOS SANTOS CORREA', email: '' },
+                    { num: 8, nome: 'CATARYNA DOS SANTOS', email: '' },
+                    { num: 9, nome: 'EDUARDO ANTONIO LAMBERT GONCALVES', email: '' },
+                    { num: 10, nome: 'LETICIA ROSARIO RIBEIRO', email: '' },
+                    { num: 11, nome: 'BERNARDO BARROSO DE ARAUJO', email: '' },
+                    { num: 13, nome: 'DIEGO GABRIEL ALEIXO GOMES', email: '' },
+                    { num: 14, nome: 'BRUNO GABRIEL GONÇALVES ROCHA', email: '' },
+                    { num: 15, nome: 'LORENNA ANDRADE DE OLIVEIRA', email: '' },
+                    { num: 16, nome: 'RAISSA MATHIAS ANDRADE', email: '' },
+                    { num: 17, nome: 'MARIA EDUARDA SOUSA BARBOZA', email: '' }
+                ],
+                C: [
+                    { num: 1, nome: 'VITOR HUGO BRAZ GOMES', email: '' },
+                    { num: 2, nome: 'NICOLLAS DOS SANTOS NUNES', email: '' },
+                    { num: 3, nome: 'ALICE DA SILVA VIEIRA', email: '' },
+                    { num: 4, nome: 'HELOISA NEVES DA SILVA', email: '' },
+                    { num: 5, nome: 'DAVI JUNIOR DA SILVA MARQUES', email: '' },
+                    { num: 6, nome: 'JULIA FERREIRA LOPES', email: '' },
+                    { num: 7, nome: 'ROSA MARIA OLIVEIRA ALMEIDA', email: '' },
+                    { num: 8, nome: 'EMILY COSTA PEREIRA', email: '' },
+                    { num: 9, nome: 'ANA LETÍCIA MARTINS DA SILVA', email: '' },
+                    { num: 10, nome: 'ISABELA SEVERA RAULINO', email: '' },
+                    { num: 11, nome: 'JHEDISON SAMUEL CASTRO RANGEL', email: '' },
+                    { num: 12, nome: 'JOAO VITOR BARBOSA PONTES', email: '' },
+                    { num: 13, nome: 'TALITA VITORIA VIEIRA NUNES', email: '' },
+                    { num: 14, nome: 'MATHEUS DUARTE DA SILVA', email: '' },
+                    { num: 15, nome: 'VICTOR EDUARDO DOS SANTOS', email: '' },
+                    { num: 16, nome: 'FELIPE BARROS DE FREITAS', email: '' },
+                    { num: 17, nome: 'ARTHUR DEIVID DA SILVA FARIAS', email: '' },
+                    { num: 18, nome: 'CLARA JAZMIN URDAPILLETA GONZALEZ', email: '' },
+                    { num: 19, nome: 'SARAH LIVIA NUNES NASCIMENTO', email: '' },
+                    { num: 20, nome: 'AGATHA RODRIGUES MIRANDA', email: '' },
+                    { num: 21, nome: 'LAURAH APARECIDA CANDIDO DE OLIVEIRA', email: '' }
+                ]
+            };
+
+            // ---------- QUESTÕES ----------
+            const questoes = [
+                {
+                    tipo: 'obj', pergunta: 'Observe a imagem da expansão do balão (simulação do Universo). O que acontece com a distância entre dois pontos quando o balão infla?',
+                    img: '<i class="fas fa-balloon"></i>  balão vazio → balão cheio', alternativas: ['A distância diminui', 'A distância permanece igual', 'A distância aumenta', 'A distância primeiro aumenta depois diminui'], correta: 2
+                },
+                {
+                    tipo: 'obj', pergunta: 'Na representação do Sistema Solar, qual corpo celeste é classificado como LUMINOSO?',
+                    img: '<i class="fas fa-sun"></i>  Sol e planetas', alternativas: ['Terra', 'Lua', 'Sol', 'Marte'], correta: 2
+                },
+                {
+                    tipo: 'obj', pergunta: 'A Terra primitiva formou-se a partir da união de pequenos corpos chamados:',
+                    img: '<i class="fas fa-meteor"></i>  choque de asteroides', alternativas: ['cometas', 'planetesimais', 'estrelas', 'meteoritos'], correta: 1
+                },
+                {
+                    tipo: 'obj', pergunta: 'Qual é a unidade de tempo MAIS adequada para medir a formação dos oceanos na Terra (ocorrida há bilhões de anos)?',
+                    img: '<i class="fas fa-hourglass-half"></i>  tempo geológico vs histórico', alternativas: ['séculos', 'décadas', 'milhões de anos', 'dias'], correta: 2
+                },
+                {
+                    tipo: 'obj', pergunta: 'As primeiras rochas sólidas surgiram na Terra há cerca de 4 bilhões de anos. Que tipo de rocha está diretamente associada à fossilização?',
+                    img: '<i class="fas fa-dragon"></i>  fóssil em camada', alternativas: ['magmáticas', 'metamórficas', 'sedimentares', 'ígneas'], correta: 2
+                },
+                {
+                    tipo: 'dis', pergunta: 'Explique a diferença entre hipótese e teoria científica. Use um exemplo do seu dia a dia para ilustrar cada uma.',
+                    img: '<i class="fas fa-flask"></i>  cientista testando ideia'
+                },
+                {
+                    tipo: 'dis', pergunta: 'A teoria do Big Bang afirma que o Universo está em expansão. Como a atividade do balão (com pontos desenhados) ajuda a entender essa ideia? Descreva a relação.',
+                    img: '<i class="fas fa-expand-alt"></i>  pontos se afastando'
+                },
+                {
+                    tipo: 'dis', pergunta: 'Compare um planeta rochoso (ex: Terra) com um planeta gasoso (ex: Júpiter) quanto à composição, posição no Sistema Solar e presença de anéis.',
+                    img: '<i class="fas fa-globe-americas"></i>  + <i class="fas fa-saturn"></i>'
+                },
+                {
+                    tipo: 'dis', pergunta: 'Por que a atmosfera primitiva era tão diferente da atual? Cite o papel dos seres fotossintetizantes nessa transformação.',
+                    img: '<i class="fas fa-leaf"></i>  primeiros oceanos'
+                },
+                {
+                    tipo: 'dis', pergunta: 'Se a história da Terra (4,6 bilhões de anos) fosse comprimida em 24 horas, os dinossauros seriam extintos perto da meia-noite. O que essa comparação revela sobre o tempo geológico em relação à existência humana?',
+                    img: '<i class="fas fa-clock"></i>  relógio da Terra'
+                }
+            ];
+
+            // ---------- VUE ----------
+            new Vue({
+                el: '#app',
+                data: {
+                    turmaSelecionada: '',
+                    alunoSelecionado: null,
+                    numeroChamada: '',
+                    emailAluno: '',
+                    alunosFiltrados: [],
+                    questoes: questoes,
+                    enviando: false, // Novo estado para controle de UI
+                    webAppUrl: 'https://script.google.com/macros/s/AKfycbwl6M73QIbzeHgu5bIZZEOIkF4oQAqsTQGkeO-SfUZQSYL4CZAR5WpfKs-w4kziUls/exec', // URL configurada
+                    respostas: questoes.map(q => {
+                        if (q.tipo === 'obj') {
+                            return { tipo: 'obj', escolha: null };
+                        } else {
+                            return { tipo: 'dis', texto: '' };
+                        }
+                    })
+                },
+                methods: {
+                    filtrarAlunos() {
+                        this.alunosFiltrados = this.turmaSelecionada ? alunosData[this.turmaSelecionada] : [];
+                        this.alunoSelecionado = null;
+                        this.numeroChamada = '';
+                        this.emailAluno = '';
+                    },
+                    preencherDados() {
+                        if (this.alunoSelecionado) {
+                            this.numeroChamada = this.alunoSelecionado.num;
+                            this.emailAluno = this.alunoSelecionado.email || '(e-mail não cadastrado)';
+                        } else {
+                            this.numeroChamada = '';
+                            this.emailAluno = '';
+                        }
+                    },
+                    enviarRespostas() {
+                        if (!this.alunoSelecionado || !this.turmaSelecionada) {
+                            alert('Por favor, selecione turma e nome do aluno.');
+                            return;
+                        }
+
+                        // Se a URL não estiver configurada, avisar o usuário
+                        if (!this.webAppUrl) {
+                            const url = prompt("Para enviar, preciso da 'URL do Aplicativo da Web' do seu Google Apps Script.\n\nCole a URL aqui (ex: https://script.google.com/.../exec):");
+                            if (!url) return;
+                            this.webAppUrl = url;
+                        }
+
+                        this.enviando = true;
+
+                        const payload = {
+                            timestamp: new Date().toLocaleString('pt-BR'),
+                            escola: 'Wanda',
+                            turma: '6ºAno ' + this.turmaSelecionada,
+                            aluno: this.alunoSelecionado.nome,
+                            numero: this.numeroChamada,
+                            email: this.emailAluno,
+                            respostas: this.respostas.map((r, idx) => {
+                                if (r.tipo === 'obj') {
+                                    return {
+                                        questao: idx + 1,
+                                        tipo: 'ME',
+                                        resposta: r.escolha !== null ? this.questoes[idx].alternativas[r.escolha] : '(não respondida)'
+                                    };
+                                } else {
+                                    return {
+                                        questao: idx + 1,
+                                        tipo: 'DIS',
+                                        resposta: r.texto || '(em branco)'
+                                    };
+                                }
+                            })
+                        };
+
+                        fetch(this.webAppUrl, {
+                            method: 'POST',
+                            mode: 'no-cors', // Apps Script requer no-cors em envios simples de formulário ou manuseio manual
+                            cache: 'no-cache',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify(payload)
+                        })
+                            .then(() => {
+                                alert('✅ Sucesso! Suas respostas foram enviadas para correção por IA e gravadas na planilha.\n\nVerifique a aba "ATIVIDADES 6aANO WANDA MASCAGNI" e a aba "Gráficos".');
+                                this.excluirRespostas(false); // Limpar após sucesso sem confirmar
+                            })
+                            .catch(err => {
+                                console.error(err);
+                                alert('❌ Erro ao enviar para o Google Sheets. Verifique sua conexão ou a URL do script.');
+                            })
+                            .finally(() => {
+                                this.enviando = false;
+                            });
+                    },
+                    excluirRespostas(confirmar = true) {
+                        if (!confirmar || confirm('Tem certeza que deseja limpar todas as respostas?')) {
+                            this.respostas = this.questoes.map(q => {
+                                if (q.tipo === 'obj') {
+                                    return { tipo: 'obj', escolha: null };
+                                } else {
+                                    return { tipo: 'dis', texto: '' };
+                                }
+                            });
+                            alert('Todas as respostas foram excluídas.');
+                        }
+                    }
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>

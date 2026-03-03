@@ -4,8 +4,6 @@
  */
 
 const SPREADSHEET_ID = '1F1qUYkW9--r8U2eCHvOpruZue-HdQRh9T5HroiE5Rws';
-const MAIN_SHEET_NAME = 'ATIVIDADES 6ªANO LYDIA';
-const GRAPH_SHEET_NAME = 'Gráficos';
 const GEMINI_API_KEY = 'SUA_CHAVE_API_AQUI'; // <--- INSIRA SUA CHAVE DO GOOGLE GEMINI AQUI
 
 /**
@@ -15,10 +13,16 @@ function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    let sheet = ss.getSheetByName(MAIN_SHEET_NAME);
+    
+    let mainSheetName = 'ATIVIDADES 6ªANO LYDIA';
+    if (data.escola === 'Wanda') {
+      mainSheetName = 'ATIVIDADES 6ªANO WANDA MASCAGNI';
+    }
+
+    let sheet = ss.getSheetByName(mainSheetName);
     
     if (!sheet) {
-      sheet = ss.insertSheet(MAIN_SHEET_NAME);
+      sheet = ss.insertSheet(mainSheetName);
       sheet.appendRow(['Data/Hora', 'Turma', 'Nº', 'Nome', 'E-mail', 'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6 (IA)', 'Q7 (IA)', 'Q8 (IA)', 'Q9 (IA)', 'Q10 (IA)', 'Status Habilidades', 'Apontamentos']);
     }
 
@@ -44,8 +48,8 @@ function doPost(e) {
 
     sheet.appendRow(newRow);
     
-    // Atualizar Gráficos
-    atualizarGraficos(ss);
+    // Atualizar Gráficos passando a escola
+    atualizarGraficos(ss, data.escola);
 
     return ContentService.createTextOutput(JSON.stringify({ status: 'success', message: 'Respostas registradas e corrigidas com sucesso!' }))
       .setMimeType(ContentService.MimeType.JSON);
@@ -117,10 +121,20 @@ function corrigirComIA(respostasDiscursivas) {
 /**
  * Cria ou atualiza a aba de Gráficos com gráficos de rosca por turma
  */
-function atualizarGraficos(ss) {
-  let graphSheet = ss.getSheetByName(GRAPH_SHEET_NAME);
+function atualizarGraficos(ss, escola) {
+  let mainSheetName = 'ATIVIDADES 6ªANO LYDIA';
+  let graphSheetName = 'Gráficos - Lydia';
+  let turmas = ['6ºAno A', '6ºAno B', '6ºAno C'];
+
+  if (escola === 'Wanda') {
+    mainSheetName = 'ATIVIDADES 6ªANO WANDA MASCAGNI';
+    graphSheetName = 'Gráficos - Wanda';
+    turmas = ['6ºAno B', '6ºAno C'];
+  }
+
+  let graphSheet = ss.getSheetByName(graphSheetName);
   if (!graphSheet) {
-    graphSheet = ss.insertSheet(GRAPH_SHEET_NAME);
+    graphSheet = ss.insertSheet(graphSheetName);
   } else {
     graphSheet.clear();
     // Remover gráficos antigos
@@ -128,11 +142,13 @@ function atualizarGraficos(ss) {
     charts.forEach(c => graphSheet.removeChart(c));
   }
 
-  const dataSheet = ss.getSheetByName(MAIN_SHEET_NAME);
+  const dataSheet = ss.getSheetByName(mainSheetName);
+  if (!dataSheet) return;
+
   const values = dataSheet.getDataRange().getValues();
+  if (values.length <= 1) return; // Só tem cabeçalho ou vazio
   const rawData = values.slice(1); // Remover cabeçalho
 
-  const turmas = ['6ºAno A', '6ºAno B', '6ºAno C'];
   let currentTitleRow = 1;
 
   turmas.forEach((turma, index) => {
