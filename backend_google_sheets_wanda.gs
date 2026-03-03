@@ -22,18 +22,25 @@ function doPost(e) {
     const data = JSON.parse(contents);
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     
+    // LOG DE DEBUG: Registra o que está chegando
+    try {
+      let logSheet = ss.getSheetByName('DEBUG_LOGS');
+      if (!logSheet) logSheet = ss.insertSheet('DEBUG_LOGS');
+      logSheet.appendRow([new Date(), "POST RECEBIDO", JSON.stringify(data)]);
+    } catch(err) {}
+
     // Identificar escola e nome base da aba
     let schoolLabel = 'LYDIA';
-    if (data.escola === 'Wanda') {
+    if (data.escola && data.escola.toUpperCase() === 'WANDA') {
       schoolLabel = 'WANDA';
     }
 
-    // Busca Robusta de Aba: Procura por nome parcial (ex: "ATIVIDADES" e "LYDIA")
+    // Busca Robusta de Aba
     let sheet = null;
     const allSheets = ss.getSheets();
     for (let s of allSheets) {
       const name = s.getName().toUpperCase();
-      if (name.includes('ATIVIDADES') && name.includes(schoolLabel)) {
+      if (name.includes(schoolLabel) || (schoolLabel === 'LYDIA' && name.includes('ATIVIDADES'))) {
         sheet = s;
         break;
       }
@@ -47,13 +54,16 @@ function doPost(e) {
     }
 
     // Separar respostas objetivas (1-5) e discursivas (6-10)
-    const respObj = data.respostas.slice(0, 5).map(r => r.resposta || "");
-    const respDis = data.respostas.slice(5, 10).map(r => r.resposta || "");
+    const respObj = (data.respostas || []).slice(0, 5).map(r => r.resposta || "");
+    const respDis = (data.respostas || []).slice(5, 10).map(r => r.resposta || "");
 
-    // Corrigir discursivas com IA
-    const correcaoIA = corrigirComIA(respDis);
+    // Corrigir discursivas com IA (se configurado)
+    let correcaoIA = { notas: [], statusGeral: "Pendente", apontamentos: "" };
+    if (GEMINI_API_KEY && GEMINI_API_KEY !== 'SUA_CHAVE_API_AQUI') {
+      correcaoIA = corrigirComIA(respDis);
+    }
     
-    // Garantir que temos 5 notas (Atingida/Não Atingida)
+    // Garantir que temos 5 notas
     while (correcaoIA.notas.length < 5) {
       correcaoIA.notas.push("Não Avaliado");
     }
@@ -73,13 +83,23 @@ function doPost(e) {
 
     sheet.appendRow(newRow);
     
-    // Atualizar Gráficos passando a escola
-    atualizarGraficos(ss, data.escola);
+    // Atualizar Gráficos
+    try {
+      atualizarGraficos(ss, data.escola);
+    } catch(err) {
+      console.log("Erro ao atualizar gráficos: " + err);
+    }
 
     return ContentService.createTextOutput(JSON.stringify({ status: 'success', message: 'Respostas registradas com sucesso!' }))
       .setMimeType(ContentService.MimeType.JSON);
 
   } catch (error) {
+    try {
+       const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+       let logSheet = ss.getSheetByName('DEBUG_LOGS');
+       if (!logSheet) logSheet = ss.insertSheet('DEBUG_LOGS');
+       logSheet.appendRow([new Date(), "ERRO CRÍTICO", error.toString()]);
+    } catch(e) {}
     return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: error.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
   }
