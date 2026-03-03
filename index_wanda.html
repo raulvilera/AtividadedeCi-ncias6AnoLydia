@@ -354,7 +354,7 @@
         </div>
         <div class="footer-note">
             <i class="fas fa-robot"></i> respostas discursivas serão corrigidas por IA automaticamente • planilha:
-            ATIVIDADES 6aANO WANDA MASCAGNI
+            ATIVIDADES 6ªANO WANDA MASCAGNI
         </div>
     </div>
 
@@ -574,7 +574,7 @@
                             body: JSON.stringify(payload)
                         })
                             .then(() => {
-                                alert('✅ Sucesso! Suas respostas foram enviadas para correção por IA e gravadas na planilha.\n\nVerifique a aba "ATIVIDADES 6aANO WANDA MASCAGNI" e a aba "Gráficos - Wanda".');
+                                alert('✅ Sucesso! Suas respostas foram enviadas para correção por IA e gravadas na planilha.\n\nVerifique a aba "ATIVIDADES 6ªANO WANDA MASCAGNI" e a aba "Gráficos - Wanda".');
                                 localStorage.removeItem('respostas_ciencias_6ano_wanda');
                                 this.excluirRespostas(false); // Limpar após sucesso sem confirmar
                             })
@@ -595,7 +595,7 @@
                                     return { tipo: 'dis', texto: '' };
                                 }
                             });
-                            alert('Todas as respostas foram excluídas.');
+                            if (confirmar) alert('Todas as respostas foram excluídas.');
                             localStorage.removeItem('respostas_ciencias_6ano_wanda');
                         }
                     }

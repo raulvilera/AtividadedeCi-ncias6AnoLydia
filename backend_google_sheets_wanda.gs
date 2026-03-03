@@ -11,7 +11,7 @@ const GEMINI_API_KEY = 'SUA_CHAVE_API_AQUI'; // <--- INSIRA SUA CHAVE DO GOOGLE 
  */
 function doPost(e) {
   try {
-    const data = JSON.parse(e.postData.contents);
+    const data = JSON.parse(e.postData.getDataAsString());
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     
     let mainSheetName = 'ATIVIDADES 6ªANO LYDIA';
